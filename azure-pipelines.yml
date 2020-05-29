@@ -21,10 +21,9 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
-- task: PowerShell@2
+- task: CmdLine@2
   inputs:
-    targetType: 'inline'
     script: |
       curl  https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip -o pipeline-scan.zip
       powershell.exe -nologo -noprofile -command "& { Add-Type -A 'System.IO.Compression.FileSystem’; 	[IO.Compression.ZipFile]::ExtractToDirectory('pipeline-scan.zip', 'veracode_scanner'); }"
-      java -jar veracode_scanner\\pipeline-scan.jar -vid $env:Veracode_ID -vkey $env:Veracode_Key -f "target/verademo.war"
+      java -jar veracode_scanner\\pipeline-scan.jar -vid %Veracode_ID% -vkey %Veracode_Key% -f "target/verademo.war"
